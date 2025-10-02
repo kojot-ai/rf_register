@@ -24,10 +24,10 @@
       width: 320px;
     }
     .logo {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: bold;
       margin-bottom: 20px;
-      color: #333;
+      color: #007bff;
     }
     input {
       width: 100%;
@@ -55,7 +55,12 @@
     .message {
       margin-top: 15px;
       font-size: 14px;
+    }
+    .success {
       color: green;
+    }
+    .error {
+      color: red;
     }
   </style>
 </head>
@@ -74,20 +79,37 @@
     document.getElementById("registerForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
-      let username = document.getElementById("username").value;
-      let password = document.getElementById("password").value;
+      let username = document.getElementById("username").value.trim();
+      let password = document.getElementById("password").value.trim();
+      let msgBox = document.getElementById("message");
+
+      if (!username || !password) {
+        msgBox.textContent = "⚠️ Username & Password wajib diisi!";
+        msgBox.className = "message error";
+        return;
+      }
 
       try {
         let response = await fetch("https://script.google.com/macros/s/AKfycbw530234MWZ7T9u4c5ncOWaMjqSOlsMPfzfd5ZeFgCh6gfsT-fj7lyJ4w_63i1qMLhL/exec", {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify({ username, password })
         });
 
         let result = await response.text();
-        document.getElementById("message").textContent = 
-          result === "SUCCESS" ? "✅ Registrasi berhasil!" : "❌ Gagal, coba lagi!";
+        if (result.includes("SUCCESS")) {
+          msgBox.textContent = "✅ Registrasi berhasil!";
+          msgBox.className = "message success";
+          document.getElementById("registerForm").reset();
+        } else {
+          msgBox.textContent = "❌ Gagal: " + result;
+          msgBox.className = "message error";
+        }
       } catch (error) {
-        document.getElementById("message").textContent = "⚠️ Error koneksi!";
+        msgBox.textContent = "⚠️ Error koneksi!";
+        msgBox.className = "message error";
       }
     });
   </script>
