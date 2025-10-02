@@ -1,47 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register User</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Member</title>
   <style>
-    body { font-family: Arial; background: #f0f2f5; display:flex; justify-content:center; align-items:center; height:100vh; }
-    form { background:white; padding:20px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); width:300px; }
-    h2 { text-align:center; }
-    input, button { width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #ccc; }
-    button { background:#4facfe; color:white; border:none; cursor:pointer; }
-    button:hover { background:#00c6ff; }
-    #status { text-align:center; margin-top:10px; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+      text-align: center;
+      width: 320px;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #007bff;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .message {
+      margin-top: 15px;
+      font-size: 14px;
+      color: green;
+    }
   </style>
 </head>
 <body>
-  <form id="regForm">
-    <h2>Register</h2>
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <input type="text" name="user_type" placeholder="User Type" required>
-    <input type="text" name="hwid" placeholder="HWID" required>
-    <input type="date" name="expiry" required>
-    <button type="submit">Register</button>
-    <p id="status"></p>
-  </form>
+  <div class="container">
+    <div class="logo">🔑 Register</div>
+    <form id="registerForm">
+      <input type="text" id="username" name="username" placeholder="Username" required>
+      <input type="password" id="password" name="password" placeholder="Password" required>
+      <button type="submit">Register</button>
+    </form>
+    <div class="message" id="message"></div>
+  </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbw530234MWZ7T9u4c5ncOWaMjqSOlsMPfzfd5ZeFgCh6gfsT-fj7lyJ4w_63i1qMLhL/exec"; // ganti URL Apps Script lo
-
-    document.getElementById("regForm").addEventListener("submit", async (e) => {
+    document.getElementById("registerForm").addEventListener("submit", async function(e) {
       e.preventDefault();
-      const form = e.target;
-      const data = {
-        username: form.username.value,
-        password: form.password.value,
-        user_type: form.user_type.value,
-        hwid: form.hwid.value,
-        expiry: form.expiry.value
-      };
 
-      let res = await fetch(scriptURL, { method: "POST", body: JSON.stringify(data) });
-      document.getElementById("status").innerText = await res.text();
-      form.reset();
+      let username = document.getElementById("username").value;
+      let password = document.getElementById("password").value;
+
+      try {
+        let response = await fetch("YOUR_APPS_SCRIPT_URL", {
+          method: "POST",
+          body: JSON.stringify({ username, password })
+        });
+
+        let result = await response.text();
+        document.getElementById("message").textContent = 
+          result === "SUCCESS" ? "✅ Registrasi berhasil!" : "❌ Gagal, coba lagi!";
+      } catch (error) {
+        document.getElementById("message").textContent = "⚠️ Error koneksi!";
+      }
     });
   </script>
 </body>
