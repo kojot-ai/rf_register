@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Register User</title>
+  <style>
+    body { font-family: Arial; background: #f0f2f5; display:flex; justify-content:center; align-items:center; height:100vh; }
+    form { background:white; padding:20px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); width:300px; }
+    h2 { text-align:center; }
+    input, button { width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #ccc; }
+    button { background:#4facfe; color:white; border:none; cursor:pointer; }
+    button:hover { background:#00c6ff; }
+    #status { text-align:center; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <form id="regForm">
+    <h2>Register</h2>
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <input type="text" name="user_type" placeholder="User Type" required>
+    <input type="text" name="hwid" placeholder="HWID" required>
+    <input type="date" name="expiry" required>
+    <button type="submit">Register</button>
+    <p id="status"></p>
+  </form>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbw530234MWZ7T9u4c5ncOWaMjqSOlsMPfzfd5ZeFgCh6gfsT-fj7lyJ4w_63i1qMLhL/exec"; // ganti URL Apps Script lo
+
+    document.getElementById("regForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        username: form.username.value,
+        password: form.password.value,
+        user_type: form.user_type.value,
+        hwid: form.hwid.value,
+        expiry: form.expiry.value
+      };
+
+      let res = await fetch(scriptURL, { method: "POST", body: JSON.stringify(data) });
+      document.getElementById("status").innerText = await res.text();
+      form.reset();
+    });
+  </script>
+</body>
+</html>
