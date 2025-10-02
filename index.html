@@ -90,12 +90,13 @@
       }
 
       try {
+        let formData = new FormData();
+        formData.append("username", username);
+        formData.append("password", password);
+
         let response = await fetch("https://script.google.com/macros/s/AKfycbw530234MWZ7T9u4c5ncOWaMjqSOlsMPfzfd5ZeFgCh6gfsT-fj7lyJ4w_63i1qMLhL/exec", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ username, password })
+          body: formData
         });
 
         let result = await response.text();
