@@ -23,8 +23,17 @@
             border-radius: 15px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             width: 100%;
+            text-align: center;
         }
         
+        .logo {
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 120px;
+            height: auto;
+        }
+
         h2 {
             text-align: center;
             color: #333;
@@ -34,6 +43,7 @@
         
         .form-group {
             margin-bottom: 25px;
+            text-align: left;
         }
         
         label {
@@ -89,6 +99,7 @@
             padding: 20px;
             border-radius: 8px;
             line-height: 1.6;
+            text-align: left;
         }
         
         .direct-submit {
@@ -103,6 +114,11 @@
 </head>
 <body>
     <div class="container">
+        <!-- LOGO -->
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+
         <h2>📝 Registration Form</h2>
         
         <div class="info">
@@ -114,8 +130,8 @@
             • Last Login: <b>Kosong</b>
         </div>
         
-        <!-- Form tanpa target="_blank" -->
-        <form id="regForm" method="POST" action="https://script.google.com/macros/s/AKfycbz8urnzUwX9ED1vkHjj-8JOVrhpSDO_VCKWo_ksk2UdcbLWvquZ6easdTPjIbxRy6jL/exec">
+        <!-- Form langsung submit ke Google Apps Script -->
+        <form method="POST" action="https://script.google.com/macros/s/AKfycbz8urnzUwX9ED1vkHjj-8JOVrhpSDO_VCKWo_ksk2UdcbLWvquZ6easdTPjIbxRy6jL/exec" target="_blank">
             <div class="form-group">
                 <label for="username">👤 Username:</label>
                 <input type="text" id="username" name="username" required placeholder="Masukkan username">
@@ -130,44 +146,34 @@
         </form>
         
         <div style="text-align: center; margin-top: 20px; color: #666; font-size: 14px;">
-            Data langsung tersimpan ke database
+            Form akan terbuka di tab baru dan data langsung tersimpan ke database
         </div>
     </div>
 
     <script>
-        document.getElementById('regForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
+        // Simple validation
+        document.querySelector('form').addEventListener('submit', function(e) {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             
             if (!username || !password) {
+                e.preventDefault();
                 alert('Username dan password harus diisi!');
-                return;
+                return false;
             }
             
             if (username.length < 3) {
+                e.preventDefault();
                 alert('Username minimal 3 karakter!');
-                return;
+                return false;
             }
-
-            // Buka popup kecil untuk submit
-            const formData = new FormData(this);
-            const queryString = new URLSearchParams(formData).toString();
-
-            const popup = window.open(
-                this.action + "?" + queryString,
-                "popupReg",
-                "width=400,height=300,left=500,top=200"
-            );
-
-            // Auto close popup setelah 3 detik
-            setTimeout(() => {
-                if (popup && !popup.closed) {
-                    popup.close();
-                    alert("✅ Registrasi berhasil! Data tersimpan.");
-                }
-            }, 3000);
+            
+            // Optional: Show loading
+            const btn = this.querySelector('button');
+            btn.innerHTML = '⏳ Processing...';
+            btn.disabled = true;
+            
+            return true;
         });
     </script>
 </body>
