@@ -1,56 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>RF Bot Login</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 100px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #status {
-      margin-top: 20px;
-      font-weight: bold;
-      color: green;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 100%;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #007cba;
+            box-shadow: 0 0 10px rgba(0, 124, 186, 0.3);
+            outline: none;
+        }
+        
+        button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #007cba 0%, #005a87 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
+            border-left: 5px solid #2196f3;
+            font-size: 14px;
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+        
+        .direct-submit {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            margin-top: 10px;
+        }
+        
+        .direct-submit:hover {
+            background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
+        }
+    </style>
 </head>
 <body>
-  <h1>Selamat datang di RF Bot</h1>
-  <button onclick="openLoginWindow()">🔑 Login</button>
+    <div class="container">
+        <h2>📝 Registration Form</h2>
+        
+        <div class="info">
+            <strong>💡 Informasi Akun:</strong><br>
+            • User Type: <b>LITE</b> <br>
+            • Masa Aktif: <b>7 hari</b><br>
+            • Status: <b>Active</b><br>
+            • HWID: <b>Kosong</b> <br>
+            • Last Login: <b>Kosong</b>
+        </div>
+        
+        <!-- Form tanpa target="_blank" -->
+        <form id="regForm" method="POST" action="https://script.google.com/macros/s/AKfycbz8urnzUwX9ED1vkHjj-8JOVrhpSDO_VCKWo_ksk2UdcbLWvquZ6easdTPjIbxRy6jL/exec">
+            <div class="form-group">
+                <label for="username">👤 Username:</label>
+                <input type="text" id="username" name="username" required placeholder="Masukkan username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">🔒 Password:</label>
+                <input type="password" id="password" name="password" required placeholder="Masukkan password">
+            </div>
+            
+            <button type="submit" class="direct-submit">🚀 Register Sekarang</button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 20px; color: #666; font-size: 14px;">
+            Data langsung tersimpan ke database
+        </div>
+    </div>
 
-  <p id="status"></p>
+    <script>
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                alert('Username dan password harus diisi!');
+                return;
+            }
+            
+            if (username.length < 3) {
+                alert('Username minimal 3 karakter!');
+                return;
+            }
 
-  <script>
-    let loginWin = null;
+            // Buka popup kecil untuk submit
+            const formData = new FormData(this);
+            const queryString = new URLSearchParams(formData).toString();
 
-    function openLoginWindow() {
-      loginWin = window.open(
-        "auth.html",   // popup login
-        "AuthWindow",
-        "width=400,height=400,left=400,top=200"
-      );
-    }
+            const popup = window.open(
+                this.action + "?" + queryString,
+                "popupReg",
+                "width=400,height=300,left=500,top=200"
+            );
 
-    // listener untuk pesan dari popup
-    window.addEventListener("message", (event) => {
-      // kalau sudah deploy ganti "*" dengan domain kamu (mis: "https://namaproject.vercel.app")
-      if (event.data.type === "login_success") {
-        document.getElementById("status").innerText =
-          "✅ Login berhasil sebagai: " + event.data.user;
-
-        // auto close popup
-        if (loginWin && !loginWin.closed) {
-          loginWin.close();
-        }
-      }
-    });
-  </script>
+            // Auto close popup setelah 3 detik
+            setTimeout(() => {
+                if (popup && !popup.closed) {
+                    popup.close();
+                    alert("✅ Registrasi berhasil! Data tersimpan.");
+                }
+            }, 3000);
+        });
+    </script>
 </body>
 </html>
